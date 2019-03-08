@@ -1,0 +1,192 @@
+{% extends "base.html" %}
+{% block title %}{{ channel }}{% endblock %}
+{% block head %}
+{% endblock %}
+{% block content %}
+<div class="container">
+  <br>
+  <div class="row">
+    <div class="col text-center"><a href="/">logout</a></div>
+  </div>
+  <br>
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-body">
+          <div id="join">
+            <form method="post" {% if actionUrl %}action="{{ actionUrl }}{% endif %}" id="username-form">
+              <div class="form-group">
+                <div class='input-group'>
+                  <input type='text' name='username' class="form-control" placeholder="username">
+                  <input type='hidden' name='password' value="{{ password }}" >
+                  <div class='input-group-append'>
+                    <button class='btn btn-primary'>Join</button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+
+          <div id="chatbox" style="display: none">
+            <div class="row">
+              <div class="col-md-8">
+                <div class="card">
+                  <div class="card-header">chat</div>
+                  <div id="messageBox" class="card-body" style="height: 400px; overflow-y: auto;">
+                    <dl id="messageList"></dl>
+                  </div>
+                    <form id="sendMessage" method="post">
+                      <div class='input-group'>
+                        <input autocomplete="off" type='text' name='message' class="form-control" placeholder="type your message...">
+
+                        <div class='input-group-append'>
+                          <button class='btn btn-primary'>Send</button>
+                        </div>
+                      </div>
+                    </form>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="card">
+                  <div class="card-header">online users</div>
+                  <div id="onlineUsers" class="card-body p-0">
+                    <ul class="list-group list-group-flush"></ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+
+{% block js %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.slim.js"></script>
+<script>
+  var channel = '{{ channel }}'
+  var username = '{{ username }}'
+  var password = '{{ password }}'
+  var isPrivate = '{{ isPrivate }}'
+
+  if (username) {
+    var socket = io.connect()
+
+    socket.on('message', function (data) {
+      addMessage(data.user, data.message)
+    })
+
+    socket.on('connect', function () {
+      $('#sendMessage input').prop('disabled', false)
+      displayBotMessage("you are connected")
+    });
+
+    socket.on('disconnect', function () {
+      $('#sendMessage input').prop('disabled', true)
+      displayBotMessage("you are disconnected")
+    });
+
+    socket.on('heartbeat', function(data) {
+      if(data.disconnect){
+        
+      } else if (data.user) {
+        refreshUsers(data.onlineUsers, data.user.id)
+      }
+    })
+
+    function joinChannel() {
+      socket.emit('join', {
+        channel: channel,
+        username: username,
+        password: password,
+        isPrivate: isPrivate,
+      })
+    }
+
+    function displayBotMessage(message) {
+      addMessage({id: 0, name: "bot-emin"}, message)
+    }
+
+    function sendMessage(message) {
+      const timestamp = Math.floor(new Date() / 1000)
+      socket.emit('message', {
+        channel: channel,
+        username: username,
+        message: message,
+        timestamp: timestamp,
+        password: password,
+        isPrivate: isPrivate,
+      })
+    }
+
+    function addMessage(user, message) {
+      const messageList = document.getElementById('messageList')
+      const messageUser = document.createElement('dt')
+      const messageBody = document.createElement('dd')
+
+      messageUser.appendChild(document.createTextNode(user.name))
+      messageBody.appendChild(document.createTextNode(message))
+
+      messageList.appendChild(messageUser)
+      messageList.appendChild(messageBody)
+      scrollMessageBox()
+    }
+
+  function refreshUsers(users, currentUserID) {
+    $('#onlineUsers ul li').remove()
+    if (users) {
+      users.forEach(function(user){
+      if(user){
+        if (user.id == currentUserID) {
+          $('#onlineUsers ul').append(`<li class="list-group-item" id="${user.id}"><b>${user.name}</b></li>`)
+        }
+        else {
+          $('#onlineUsers ul').append(`<li class="list-group-item" id="${user.id}">${user.name}</li>`)
+        }
+      }
+    })
+    }
+  }
+
+  function showChatbox() {
+    document.getElementById('join').style.display = 'none'
+    document.getElementById('chatbox').style.display = 'block'
+  }
+
+  function scrollMessageBox(){
+    var elem = document.getElementById('messageBox')
+    elem.scrollTop = elem.scrollHeight + 50
+  }
+
+  const sendMessageElement = document.getElementById('sendMessage');
+  sendMessageElement.addEventListener('submit', e => {
+    e.preventDefault();
+    const message = e.target.message.value
+    if(message) {
+      sendMessage(message)
+    }
+    e.target.message.value = ''
+    scrollMessageBox()
+  })
+
+  function pingSocket() {
+      socket.emit('trigger', {
+        channel: channel,
+        username: username,
+        password: password,
+        isPrivate: isPrivate,
+      })
+  }
+
+  joinChannel()
+  showChatbox()
+  pingSocket()
+  
+  setInterval(function(){ 
+    pingSocket()
+  }, 2000)
+}
+</script>
+{% endblock js %}

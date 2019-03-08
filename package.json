@@ -1,0 +1,35 @@
+{
+  "name": "eminymous",
+  "version": "0.0.1",
+  "description": "an open source project aiming to provide chatroom based chat experience without any kind of data stored anywhere except your own browser. sockets. no history. instant. completely anonymous.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon --inspect=0.0.0.0 app.js",
+    "start:prod": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ebsaral/eminymous.git"
+  },
+  "author": "emin bugra saral",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ebsaral/eminymous/issues"
+  },
+  "homepage": "https://github.com/ebsaral/eminymous#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "express": "^4.16.4",
+    "express-sslify": "^1.2.0",
+    "express-trimmer": "0.0.3",
+    "express-validator": "^5.3.1",
+    "helmet": "^3.15.1",
+    "node-pre-gyp": "^0.12.0",
+    "nodemon": "^1.18.10",
+    "nunjucks": "^3.2.0",
+    "redis": "^2.8.0",
+    "socket.io": "^2.2.0",
+    "uuid": "^3.3.2"
+  }
+}

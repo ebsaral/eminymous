@@ -1,0 +1,8 @@
+FROM node:10.15.3-alpine
+
+WORKDIR /app
+
+ENV NODE_ENV development
+ADD package.json /app
+
+RUN npm install
