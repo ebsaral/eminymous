@@ -1,0 +1,259 @@
+{% extends "base.html" %}
+{% block title %}{{ channel }}{% endblock %}
+{% block head %}
+<link href="/static/css/emojionearea.min.css" rel="stylesheet">
+{% endblock %}
+{% block content %}
+<div class="container">
+  <br>
+  <div class="row">
+    <div class="col text-center"><a href="/">logout</a></div>
+  </div>
+  <br>
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-body">
+          <div id="join">
+            <form method="post" {% if actionUrl %}action="{{ actionUrl }}{% endif %}" id="username-form">
+              <div class="form-group">
+                <div class='input-group'>
+                  <input type='text' name='username' class="form-control" placeholder="username">
+                  <input type='hidden' name='password' value="{{ password }}" >
+                  <div class='input-group-append'>
+                    <button class='btn btn-primary'>Join</button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+
+          <div id="chatbox" style="display: none">
+            <div class="row">
+              <div class="col-md-8">
+                <div class="card">
+                  <div class="card-header">chat <b>{{ channel }}</b></div>
+                  <div id="messageBox" class="card-body" style="height: 400px; overflow-y: auto;">
+                    <dl id="messageList"></dl>
+                  </div>
+                    <form method="post">
+                      <div class='input-group emojiArea'>
+                        <input id="messageInput" data-emojiable="true" autocomplete="off" type='text' name='message' class="form-control" placeholder="enter message...">
+                      </div>
+                    </form>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="row">
+                    <div class="card">
+                        <div class="card-header">online users</div>
+                        <div id="onlineUsers" class="card-body p-0">
+                          <ul class="list-group list-group-flush"></ul>
+                        </div>
+                      </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="card">
+                    <div id="color" class="card-body p-0">
+                        <input class="jscolor" onchange="updateColor(this.jscolor)" value="#000">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+
+{% block js %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.slim.js"></script>
+<script>
+  var channel = '{{ channel }}'
+  var username = '{{ username }}'
+  var password = '{{ password }}'
+  var isPrivate = '{{ isPrivate }}'
+  var botName = '{{ BOT_NAME }}'
+  var usernameColor = '000000'
+  var typingTimestamp = null
+  var isConnected = false
+
+  if (username) {
+    var socket = io.connect()
+
+    socket.on('message', function (data) {
+      addMessage(data.user, data.message)
+    })
+
+    socket.on('connect', function () {
+      isConnected = true
+      displayBotMessage("you are connected")
+    });
+
+    socket.on('disconnect', function () {
+      isConnected = false
+      displayBotMessage("you are disconnected")
+    });
+
+    socket.on('heartbeat', function(data) {
+      if (data.user) {
+        refreshUsers(data.onlineUsers, data.user.id)
+      }
+    })
+
+    function joinChannel() {
+      socket.emit('join', {
+        channel: channel,
+        username: username,
+        password: password,
+        isPrivate: isPrivate,
+      })
+    }
+
+    function displayBotMessage(message) {
+      addMessage({id: 0, name: botName}, message)
+    }
+
+    function sendMessage(message) {
+      const timestamp = Math.floor(new Date())
+      setTyping(-100000)
+      pingSocket()
+      socket.emit('message', {
+        channel: channel,
+        username: username,
+        message: message,
+        timestamp: timestamp,
+        password: password,
+        isPrivate: isPrivate,
+      })
+    }
+
+    function addMessage(user, message) {
+      const messageList = document.getElementById('messageList')
+      const messageUser = document.createElement('dt')
+      const messageBody = document.createElement('dd')
+      
+      if(user.color) {
+        messageUser.innerHTML = `<font color="#${user.color}">${user.name}</font>`
+      }
+      else {
+        messageUser.innerHTML = `${user.name}`
+      }
+      
+      messageBody.appendChild(document.createTextNode(message))
+
+      messageList.appendChild(messageUser)
+      messageList.appendChild(messageBody)
+      scrollMessageBox()
+    }
+
+  function refreshUsers(users, currentUserID) {
+    $('#onlineUsers ul li').remove()
+    if (users) {
+      users.forEach(function(user){
+      if(user){
+        var icon = 'fa-globe'
+        var color = 'text-success'
+
+        if(user.status == 'offline') {
+          color = 'text-danger'
+        }
+        if(user.status == 'typing') {
+          icon = 'fa-pencil-alt'
+        }
+        $('#onlineUsers ul').append(`<li class="list-group-item" id="${user.id}"><i class="${color} fas ${icon}"></i> <font color="#${user.color}"><b>${user.name}</b></font></li>`)        
+      }
+    })
+    }
+  }
+
+  function showChatbox() {
+    document.getElementById('join').style.display = 'none'
+    document.getElementById('chatbox').style.display = 'block'
+  }
+
+  function scrollMessageBox(){
+    var elem = document.getElementById('messageBox')
+    elem.scrollTop = elem.scrollHeight + 50
+  }
+
+  function getMessageText() {
+    var el = $("#messageInput").emojioneArea()
+    return el[0].emojioneArea.getText()
+  }
+
+  function setMessageText(text) {
+    var el = $("#messageInput").emojioneArea()
+    el[0].emojioneArea.setText(text)
+  }
+
+  function setColor() {
+    socket.emit('setColor', {
+        channel: channel,
+        username: username,
+        password: password,
+        isPrivate: isPrivate,
+        color: usernameColor,
+      })
+  }
+  
+  function setTyping(offset) {
+    const ts = Math.floor(Date.now())
+    typingTimestamp = ts + (offset || 0)
+  }
+
+  function pingSocket() {
+    const data = {
+      channel: channel,
+      username: username,
+      password: password,
+      isPrivate: isPrivate,
+      typingTimestamp: typingTimestamp,
+      color: usernameColor,
+    }
+    socket.emit('trigger', data)
+  }
+
+  joinChannel()
+  showChatbox()
+  setColor()
+  pingSocket()
+  
+  function updateColor(picker) {
+    usernameColor = picker.toString()
+    pingSocket()
+  } 
+  
+  setInterval(function(){ 
+    pingSocket()
+  }, 500)
+}
+</script>
+<script type="text/javascript" src="/static/js/jscolor.js"></script>
+<script  type="text/javascript" src="/static/js/emojionearea.min.js"></script>
+<script>
+$(document).ready(function() {
+  var arena = $("#messageInput").emojioneArea({
+    hideSource: true,
+    autocompleteTones: false,
+    autoComplete: false,
+  })
+
+  arena[0].emojioneArea.on("keyup", function(btn, e) {
+    if(isConnected){
+      setTyping()
+      var text = getMessageText().trim()
+      if (e.key == 'Enter' && text) {
+        console.log('text')
+        sendMessage(text)
+        setMessageText('')
+      }
+    }
+  })
+})
+</script>
+{% endblock js %}

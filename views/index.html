@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}home{% endblock %}
+{% block head %}
+{% endblock %}
+{% block content %}
+<div class="container">
+  <br>
+  <div class="row">
+    <div class="col">
+        <p class="h4"><a href="/">{{ WEBSITE_NAME }}</a> | anonymous socket chat</p>
+        <p class="lead">
+            an open source project aiming to provide chat experience without any kind of data being stored anywhere except your own browser. no history. instant. completely anonymous.
+         </p>
+    </div>
+  </div>
+  <br>
+  <div class="row">
+    <div class="col">
+      <form method="post" action="/join">
+        <div class="form-group">
+          <select class="form-control" name="channel" id="channel">
+            {% for channel in channels %}
+            <option>{{ channel }}</option>
+            {% endfor %}
+          </select>
+          <small class="form-text text-muted">recently active (in the last one hour) public chat rooms.</small>
+        </div>
+        <button class="btn btn-primary">join channel</button>
+        
+      </form>
+    </div>
+    <div class="col">
+      <form method="post" action="/channel">
+        <div class="form-group">
+          <input class="form-control" name="newChannel" id="newChannel" placeholder="name for a new channel">
+          <small class="form-text text-muted">if not entered, a random name will be assigned.</small>
+        </div>
+        <div class="form-group">
+          <input class="form-control" name="password" id="password" placeholder="password">
+          <small class="form-text text-muted">if you set a password, this channel will be private it will also require password, obviously. no activity in one hour will delete the channel, also its protection.</small>
+        </div>
+        <button class="btn btn-primary">create channel</button>
+      </form>
+    </div>
+  </div>
+  <br>
+  <div class="row">
+    <div class="col">
+        <small><a href="https://github.com/ebsaral/eminymous">github page</a> | powered by <a href="https://nodejs.org">nodejs</a> (<a href="https://expressjs.com/">expressjs</a>), <a href="https://socket.io/">socket.io</a> and <a href="https://redis.io/">redis</a>. version: {{ VERSION }}</small>
+    </div>
+    
+  </div>
+    
+  </div>
+{% endblock %}
+{% block js %}
+
+{% endblock %}
