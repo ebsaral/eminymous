@@ -11,7 +11,9 @@ const app = express()
 
 app.set('view engine', 'html')
 
-app.use(enforce.HTTPS({ trustProtoHeader: true }))
+if(process.env.NODE_ENV != 'development') {
+    app.use(enforce.HTTPS({ trustProtoHeader: true }))
+}
 app.use(helmet())
 app.use(express.urlencoded())
 app.use(express.json())

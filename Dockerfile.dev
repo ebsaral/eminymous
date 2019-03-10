@@ -2,7 +2,13 @@ FROM node:10.15.3-alpine
 
 WORKDIR /app
 
+RUN apk --no-cache add python make g++
+
+EXPOSE 3000
+
 ENV NODE_ENV development
 ADD package.json /app
+
+COPY . .
 
 RUN npm install

@@ -5,6 +5,13 @@ services:
   app:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
+    environment:
+      - NODE_ENV=development
+      - REDIS_URL=redis://redis:6379/
     ports:
       - 80:3000
+    volumes:
+      - .:/app
+      - /node_modules/
+    command: npm run start
