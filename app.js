@@ -108,8 +108,8 @@ app.get('/private/:channel', (req, res) => {
                     res.end()
                 }
             } else {
-                res.redirect(`/private/${data.escapedChannel}?noChannel=1`)
-                res.end()
+                utils.setRoom({channel: data.channel, isPrivate: data.isPrivate, password: data.password})
+                res.render('chat', {username: '', channel: data.channel, isPrivate: data.isPrivate, password: data.password, actionUrl:`/private/${data.escapedChannel}`})
             }
         }
     })
@@ -147,8 +147,8 @@ app.post('/private/:channel', (req, res) => {
                     res.end()
                 }
             } else {
-                res.redirect(`/private/${data.escapedChannel}?noChannel=1`)
-                res.end()
+                utils.setRoom({channel: channel, isPrivate: true, password: data.password})
+                    res.render('chat', {username: username, channel: data.channel, isPrivate: true, password: data.password})
             }
         }
     })

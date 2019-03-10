@@ -1,5 +1,5 @@
 # eminymous
-eminymous chat. v 0.0.3
+eminymous chat. v 0.0.4
 
 an open source project aiming to provide chatroom based chat experience without any kind of data stored anywhere except your own browser. no history. instant. completely anonymous.
 
@@ -11,6 +11,11 @@ https://www.eminymous.wtf/
 - or enter a password to declare a private channel. and share the password with your friends to have private chat. `https://www.eminymous.wtf/private/${channelName}?password=${password}` and there you go.
 
 this whole code is deployed to heroku within a docker container. it's running with a free redis plan.
+
+## API
+
+- create/join a public channel: `https://www.eminymous.wtf/public/{channelName}`
+- create/join a private channel: `https://www.eminymous.wtf/private/{channelName}?password={password}`
 
 
 ## environment variables
