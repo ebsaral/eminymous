@@ -299,7 +299,6 @@ function setColor({socket, color}) {
 
 io.on('connection', (socket) => {
     socket.on('trigger', function(data){
-        console.log(data)
         setStatus({socket: socket, color: data.color, typingTimestamp: data.typingTimestamp, data: data, callback: function(
             {socket, status, color, validationData}
         ){
