@@ -1,7 +1,7 @@
 # eminymous
 eminymous chat
 
-an open source project aiming to provide chatroom based chat experience without any kind of data stored anywhere except your own browser. sockets. no history. instant. completely anonymous.
+an open source project aiming to provide chatroom based chat experience without any kind of data stored anywhere except your own browser. no history. instant. completely anonymous.
 
 https://www.eminymous.wtf/
 
