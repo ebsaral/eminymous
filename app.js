@@ -21,7 +21,7 @@ nunjucks.configure('views', {
     autoescape: true,
     express: app
 }).addGlobal('WEBSITE_NAME', process.env.WEBSITE_NAME || 'eminymous').addGlobal(
-    'VERSION', process.env.VERSION || '0.0.1'
+    'VERSION', process.env.VERSION || '0.0.2'
 )
 
 app.get('/', (req, res) => {
