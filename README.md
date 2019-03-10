@@ -14,8 +14,8 @@ this whole code is deployed to heroku within a docker container. it's running wi
 
 ## API
 
-- create/join a public channel: `https://www.eminymous.wtf/public/{channelName}`
-- create/join a private channel: `https://www.eminymous.wtf/private/{channelName}?password={password}`
+- create/join a public channel: `https://www.eminymous.wtf/public/${channelName}`
+- create/join a private channel: `https://www.eminymous.wtf/private/${channelName}?password=${password}`
 
 
 ## environment variables
