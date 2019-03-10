@@ -23,8 +23,28 @@ nunjucks.configure('views', {
     autoescape: true,
     express: app
 }).addGlobal('WEBSITE_NAME', process.env.WEBSITE_NAME || 'eminymous').addGlobal(
-    'VERSION', process.env.VERSION || '0.0.2'
-)
+    'VERSION', process.env.VERSION
+).addGlobal('BOT_NAME', process.env.BOT_NAME || 'bot.emin')
+
+app.get('*', (req, res, next) => {
+    if (req.body.username == (process.env.BOT_NAME || 'bot.emin')) {
+        res.redirect('/?notAllowed=1')
+        res.end()
+    }
+    else {
+        next()
+    }
+})
+
+app.post('*', (req, res, next) => {
+    if (req.body.username == (process.env.BOT_NAME || 'bot.emin')) {
+        res.redirect('/?notAllowed=1')
+        res.end()
+    }
+    else {
+        next()
+    }
+})
 
 app.get('/', (req, res) => {
     utils.getAllPublicChannels(function(keys){
@@ -50,11 +70,6 @@ app.post('/public/:channel', (req, res) => {
     const escapedChannel = req.params.channel
     const username = req.body.username || uuidv4()
 
-    if (username == 'bot.emin') {
-        res.redirect('/?notAllowed=1')
-        res.end()
-        return
-    }
     if (!escapedChannel) {
         res.redirect('/?noChannel=1')
         res.end()

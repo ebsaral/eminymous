@@ -1,5 +1,5 @@
 # eminymous
-eminymous chat. v 0.0.2
+eminymous chat. v 0.0.3
 
 an open source project aiming to provide chatroom based chat experience without any kind of data stored anywhere except your own browser. no history. instant. completely anonymous.
 
@@ -26,6 +26,10 @@ the time until when public chatroom names will be saved in redis database. yes, 
 ### WEBSITE_NAME:
 
 generic name for the whole website title. default: `eminymous`
+
+### BOT_NAME:
+
+name for your information bot. default: `bot.emin`
 
 
 MIT License

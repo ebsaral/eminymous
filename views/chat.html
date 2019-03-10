@@ -70,6 +70,7 @@
   var username = '{{ username }}'
   var password = '{{ password }}'
   var isPrivate = '{{ isPrivate }}'
+  var botName = '{{ BOT_NAME }}'
 
   if (username) {
     var socket = io.connect()
@@ -106,7 +107,7 @@
     }
 
     function displayBotMessage(message) {
-      addMessage({id: 0, name: "bot-emin"}, message)
+      addMessage({id: 0, name: botName, message)
     }
 
     function sendMessage(message) {
