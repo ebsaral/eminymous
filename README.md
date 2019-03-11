@@ -1,7 +1,7 @@
 # eminymous
 eminymous chat. v 0.1.0
 
-an open source project aiming to provide chatroom based chat experience without any kind of data stored anywhere except your own browser. no history. instant. completely anonymous.
+an open source project aiming to provide chat experience without any kind of data being stored anywhere except your own browser. no history. instant. completely anonymous.
 
 https://www.eminymous.wtf/
 
