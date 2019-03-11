@@ -26,9 +26,9 @@ this whole code is deployed to heroku within a docker container. it's running wi
 - create/join a private channel: `https://www.eminymous.wtf/private/${channelName}?password=${password}`
 
 
-## environment variables
+## ENVIRONMENT VARIABLES
 
-### REDIS_URL or REDITOGO_URL
+### REDIS_URL or REDITOGO_URL:
 
 redis url to connect, darling. default: `redis://localhost:6379/`
 
@@ -47,6 +47,11 @@ name for your information bot. default: `bot.emin`
 ### TYPING_DELAY:
 
 the frequency for detecting typing in miliseconds. default: `1000`
+
+
+## DEVELOPMENT
+
+`docker-compose up`
 
 
 ## MIT License
