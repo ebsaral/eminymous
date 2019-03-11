@@ -49,9 +49,18 @@ name for your information bot. default: `bot.emin`
 the frequency for detecting typing in miliseconds. default: `1000`
 
 
-## DEVELOPMENT
+## DEVELOPMENT / CONTRIBUTION 
 
-`docker-compose up`
+this project was developed in order to gain experience with nodejs and written in 2 days, so don't be surprised with the low quality of coding. but it will be improved by the time i get better with nodejs. feel free to contribute. 
+
+run `docker-compose up` in your local to work on this project.
+
+## TODO
+
+- write tests.
+- implement photo sharing feature over sockets.
+- make user experience and user interface better.
+- keep it anonymous.
 
 
 ## MIT License
