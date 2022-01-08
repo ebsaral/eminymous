@@ -1,38 +1,42 @@
 {
-  "name": "eminymous",
-  "version": "0.0.1",
-  "description": "an open source project aiming to provide chatroom based chat experience without any kind of data stored anywhere except your own browser. sockets. no history. instant. completely anonymous.",
-  "main": "index.js",
+  "name": "eminymous.io",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon -e js,html app.js",
-    "start:prod": "node app.js"
+    "dev": "nodemon",
+    "build": "next build && tsc --project tsconfig.server.json",
+    "start": "cross-env NODE_ENV=production node dist/index.js",
+    "lint": "next lint",
+    "post-update": "echo \"codesandbox preview only, need an update\" && yarn upgrade --latest"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ebsaral/eminymous.git"
-  },
-  "author": "emin bugra saral",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/ebsaral/eminymous/issues"
-  },
-  "homepage": "https://github.com/ebsaral/eminymous#readme",
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^5.7.2",
-    "bcryptjs": "^2.4.3",
-    "cors": "^2.8.5",
-    "express": "^4.16.4",
-    "express-fonts": "^1.0.4",
-    "express-sslify": "^1.2.0",
-    "express-trimmer": "0.0.3",
-    "express-validator": "^5.3.1",
-    "helmet": "^3.15.1",
-    "node-pre-gyp": "^0.12.0",
-    "nodemon": "^1.18.10",
-    "nunjucks": "^3.2.0",
-    "redis": "^2.8.0",
-    "socket.io": "^2.2.0",
-    "uuid": "^3.3.2"
+    "@emotion/cache": "latest",
+    "@emotion/react": "latest",
+    "@emotion/server": "latest",
+    "@emotion/styled": "latest",
+    "@mui/icons-material": "latest",
+    "@mui/material": "latest",
+    "@mui/styles": "^5.2.3",
+    "classnames": "^2.3.1",
+    "cross-env": "^7.0.2",
+    "express": "^4.17.2",
+    "next": "latest",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "socket.io": "^4.4.1"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.13",
+    "@types/node": "^17.0.8",
+    "@types/react": "^17.0.38",
+    "@types/react-dom": "^17.0.11",
+    "eslint": "latest",
+    "eslint-config-next": "latest",
+    "nodemon": "^2.0.4",
+    "ts-node": "^10.4.0",
+    "typescript": "4.5.4"
+  },
+  "optionalDependencies": {
+    "bufferutil": "^4.0.6",
+    "utf-8-validate": "^5.0.8"
   }
 }

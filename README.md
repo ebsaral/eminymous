@@ -1,86 +1,22 @@
-# eminymous
-eminymous chat. v 0.1.0
+# Custom server with TypeScript + Nodemon example
 
-an open source project aiming to provide chat experience without any kind of data being stored anywhere except your own browser. no history. instant. completely anonymous.
+The example shows how you can use [TypeScript](https://typescriptlang.com) on both the server and the client while using [Nodemon](https://nodemon.io/) to live reload the server code without affecting the Next.js universal code.
 
-https://www.eminymous.wtf/
+Server entry point is `server/index.ts` in development and `dist/index.js` in production.
+The second directory should be added to `.gitignore`.
 
-## FEATURES
+## Preview
 
-- chatrooms (public/private)
-- emoji support
-- typing detection
-- room related notifications
-- user text color palette
+Preview the example live on [StackBlitz](http://stackblitz.com/):
 
-## HOW 
+[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/vercel/next.js/tree/canary/examples/custom-server-typescript)
 
-- create a channel, without a password and make it public for everyone. to be displayed on the homepage.
-- or enter a password to declare a private channel. and share the password with your friends to have private chat. `https://www.eminymous.wtf/private/${channelName}?password=${password}` and there you go.
+## How to use
 
-this whole code is deployed to heroku within a docker container. it's running with a free redis plan.
+Execute [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) with [npm](https://docs.npmjs.com/cli/init) or [Yarn](https://yarnpkg.com/lang/en/docs/cli/create/) to bootstrap the example:
 
-## API
-
-- create/join a public channel: `https://www.eminymous.wtf/public/${channelName}`
-- create/join a private channel: `https://www.eminymous.wtf/private/${channelName}?password=${password}`
-
-
-## ENVIRONMENT VARIABLES
-
-### REDIS_URL or REDITOGO_URL:
-
-redis url to connect, darling. default: `redis://localhost:6379/`
-
-### CHANNEL_EXPIRE_IN_SECONDS:
-
-the time until when public chatroom names will be saved in redis database. yes, we save these names only for an expiring period. by using redis's `expire` function. default: `3600`
-
-### WEBSITE_NAME:
-
-generic name for the whole website title. default: `eminymous`
-
-### BOT_NAME:
-
-name for your information bot. default: `bot.emin`
-
-### TYPING_DELAY:
-
-the frequency for detecting typing in miliseconds. default: `1000`
-
-
-## DEVELOPMENT / CONTRIBUTION 
-
-this project was developed in order to gain experience with nodejs and written in 2 days, so don't be surprised with the low quality of coding. but it will be improved by the time i get better with nodejs. feel free to contribute. 
-
-run `docker-compose up` in your local to work on this project.
-
-## TODO
-
-- write tests.
-- implement photo sharing feature over sockets.
-- make user experience and user interface better.
-- keep it anonymous.
-
-
-## MIT License
-
-Copyright (c) 2019 Emin Bugra Saral
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+```bash
+npx create-next-app --example custom-server-typescript custom-server-typescript-app
+# or
+yarn create next-app --example custom-server-typescript custom-server-typescript-app
+```
